@@ -51,11 +51,14 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: '{url}'
+        url: 'https://www.cheapshark.com/api/1.0/games?title={title}&steamAppID={steamAppID}'
+
+      },
+      query:{
 
       },
       functions: {
-        getListOfGames: ['url'],
+        getListOfGames: ['title','steamAppID'],
       }
     },
     {

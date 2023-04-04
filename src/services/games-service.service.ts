@@ -1,31 +1,26 @@
 import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
 import {CheapSharkDataSource} from '../datasources';
-import {Deal, Game, GameLookup, StoreModel} from "../models";
-import {Filter} from "@loopback/repository";
+import {Game, GameLookup} from "../models";
 
-export interface CheapShark {
+export interface GamesService {
   // this is where you define the Node.js methods that will be
   // mapped to REST/SOAP/gRPC operations as stated in the datasource
   // json file.
-  getAllStores(): Promise<StoreModel[]>;
-  getAllStoresLastChange(): Promise<StoreModel[]>;
-
-  getListOfDeals(storeID: string,upperPrice?:string): Promise<Deal[]>;
-  getDealLookup(id:string): Promise<Deal>;
-
-
+  getListOfGames(title?:string,steamAppID?:string): Promise<Game[]>;
+  getGameLookup(id:string): Promise<GameLookup>;
+  getMultiGameLookup(url:string): Promise<{}>;
+  getGameAlert(url:string): Promise<boolean>;
 }
 
-export class CheapSharkProvider implements Provider<CheapShark> {
+export class GamesServiceProvider implements Provider<GamesService> {
   constructor(
     // CheapShark must match the name property in the datasource json file
     @inject('datasources.CheapShark')
     protected dataSource: CheapSharkDataSource = new CheapSharkDataSource(),
   ) {}
 
-
-  value(): Promise<CheapShark> {
+  value(): Promise<GamesService> {
     return getService(this.dataSource);
   }
 }

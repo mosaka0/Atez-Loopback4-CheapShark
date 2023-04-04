@@ -34,7 +34,12 @@
     "prestart": "npm run rebuild",
     "start": "node -r source-map-support/register .",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
-    "rebuild": "npm run clean && npm run build"
+    "rebuild": "npm run clean && npm run build",
+    "precoverage": "npm test",
+    "coverage": "open coverage/index.html",
+    "coverage:ci": "lb-nyc report --reporter=text-lcov | coveralls",
+    "tests": "lb-nyc npm run mocha",
+    "test:ci": "lb-nyc npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -64,7 +69,9 @@
     "@loopback/eslint-config": "^13.0.9",
     "@loopback/testlab": "^5.0.9",
     "@types/node": "^14.18.36",
+    "chai": "^4.3.7",
     "eslint": "^8.35.0",
+    "mocha": "^10.2.0",
     "source-map-support": "^0.5.21",
     "typescript": "~4.9.4"
   }

@@ -20,14 +20,14 @@ import {
 import {CheapSharkGame, Deal, Game, GameDeals, GameLookup} from '../models';
 import {GameRepository} from '../repositories';
 import {inject} from "@loopback/core";
-import {CheapShark} from "../services";
+import {GamesService} from "../services";
 
 export class GameControllerController {
   constructor(
     @repository(GameRepository)
     public gameRepository : GameRepository,
-    @inject('services.CheapShark')
-    protected cheapShark: CheapShark
+    @inject('services.GamesService')
+    protected cheapShark: GamesService
   ) {}
 
   // 2.1 ve 2.2 Oyun yoksa DB'ye kaydet, varsa en güncel verilerini çek güncelle
@@ -37,18 +37,12 @@ export class GameControllerController {
     @param.query.string('steamAppID') steamAppID:string,
   ):Promise<any> {
 
-    let url = 'https://www.cheapshark.com/api/1.0/games?'
-    if(title){
-      url = url+'title='+title;
-    }
-    if(steamAppID){
-      url = url+'&steamAppID='+steamAppID;
-    }
-    const getListOfGames = await this.cheapShark.getListOfGames(url);
-    console.log(getListOfGames);
+    /*const getListOfGames = await this.cheapShark.getListOfGames(title,steamAppID);
+    console.log(getListOfGames);*/
 
+    return await this.cheapShark.getListOfGames(title,steamAppID);
     // @ts-ignore
-    getListOfGames.forEach(async (game:CheapSharkGame) => {
+   /* getListOfGames.forEach(async (game:CheapSharkGame) => {
       const findIndex = await this.gameRepository.findOne({where:{gameID:game.gameID}});
       const newGame = new Game();
       newGame.gameID = game.gameID;
@@ -64,7 +58,7 @@ export class GameControllerController {
         return await this.gameRepository.updateAll(newGame,{gameID:newGame.gameID});
       }
     })
-
+*/
   }
 
   // 2.3 Oyunun fiyatı için alarm kurma
